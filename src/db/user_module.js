@@ -87,7 +87,7 @@ userSchema.pre('save' , async function(next){
 
 userSchema.methods.getAuthToken = async function(){
   var user = this;
-  var token = await jwt.sign({_id:user._id.toString()},"secretkey");
+  var token = await jwt.sign({_id:user._id.toString()},process.env.JWT_SECRETKEY);
   user.tokens= user.tokens.concat({token});
   //console.log("runned get auth token")
   await user.save();

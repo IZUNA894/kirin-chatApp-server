@@ -23,7 +23,7 @@ app.use(express.static(publicPath),(req,res,next)=>{
 app.use(require("cors")());
 app.use(
   cors({
-    origin: ["http://localhost:3001"],
+    origin: [process.env.APP_LINK],
     credentials: true
   })
 );
@@ -40,9 +40,9 @@ socketUtil(io);
 app.get('/hello',function(req,res){
  res.end("hello from express sever req processing");
 });
-
-server.listen(3001,()=>{
-  console.log("listening on port 3001");
+var port = process.env.PORT || 3001
+server.listen(port,()=>{
+  console.log("listening on port " , port);
 });
 
 
