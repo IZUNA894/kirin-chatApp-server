@@ -185,7 +185,8 @@ router.post('/users/create', async function(req,res){
 //login a user
 router.post('/users/login', async function(req,res){
  try{
-   var user = await User.findByCredentials(req.body.email,req.body.password,()=>{throw new Error("unable to login")});
+   console.log("user trying to login");
+   var user = await User.findByCredentials(req.body.email,req.body.password);
    //console.log(req.body.password);
    //console.log(user);
    //var user = await User.findOne({email});
@@ -199,7 +200,8 @@ router.post('/users/login', async function(req,res){
  }
   catch(e)
   {
-    //console.log(e);
+    console.log("error got while login");
+    console.log(e);
     res.status(400).send("unable to login");
   }
 
