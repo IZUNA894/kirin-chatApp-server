@@ -1,3 +1,6 @@
+//this router here handle all relations related req..
+// add a friend...deleting a friend from a usrs list..
+
 var express = require("express");
 var router = express.Router();
 var Relations= require('../db/relations');
@@ -15,20 +18,19 @@ router.patch('/rel/addFriend',async function(req,res)
    var {uid,sender} = body;
    var name = sender;
    var user = await Relations.find({name});
-  //  console.log('user',user,'name',name);
    if(user.length == 0){
+       // if usr itself  doesnt exit ,create new , insert his friend ,(happen when usr is just new ,and just added his 1st friend)
        console.log("inisde if");
        var name = sender;
        var RelObj = new Relations({name});
-       //var RelObj = Relations.insertMany([{name}]);
        RelObj.isFriendWith.push({uid});
        var report = await RelObj.save();
       //  console.log(report)
        res.send(report);
    }
    else{
-      //  console.log("inside else");
-       var name = sender;
+    // if usr rel exist ,simple insert the ask person into its rel...
+    var name = sender;
        var RelObj = await Relations.find({name});
       //  console.log(RelObj);
        RelObj = RelObj[0];
@@ -57,7 +59,6 @@ router.patch('/rel/deleteFriend',async function(req,res)
        var RelObj = await Relations.find({name});
       //  console.log(RelObj);
        RelObj = RelObj[0];
-       //RelObj.isFriendWith.push({uid});
        RelObj.isFriendWith = RelObj.isFriendWith.filter((idObj)=>{
                                                                 return idObj.uid != uid
                                                                })
@@ -73,18 +74,17 @@ router.patch('/rel/deleteFriend',async function(req,res)
 
 //get a user list...
 router.get('/rel/getFriend',async function(req,res){
-  //var body = req.body;
-  //console.log('body',req.query.sender);
-  //var {sender} =  body;
+  
   var name = req.query.sender;
   var user = await Relations.find({name});
   // console.log('getFriend',user,name);
   if(user.length == 0){
-    //console.log("inside if");
+    //if usr doesnt have friends
     res.status(200).send([]);
   }
   else{
-    //console.log("inside else");
+    // if usr has friends...
+    //we will first fill the enteries from foreign model,then send it
     await Relations.find({name}).populate({
        path:'isFriendWith.uid',
        model:'Users',

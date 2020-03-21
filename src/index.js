@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const http = require("http");
 const socket = require("socket.io");
-const Filter= require("bad-words");
 const cors = require("cors");
 
 var UserRouter = require("./routers/user_router");
@@ -13,7 +12,6 @@ require('./db/mongoose');
 
 var app = express();
 var publicPath= path.join(__dirname , "../","/public");
-var filter = new Filter();
 var server = http.createServer(app);
 
 app.use(express.json());
@@ -46,21 +44,3 @@ server.listen(port,()=>{
 });
 
 
-// function readMsgBanner(socket)
-// {
-//   socket.emit("msgRead");
-// }
-// function sendGreetings(socket){
-//   socket.emit("WelcomeGreetings");
-// }
-
-// function sendJoinedbanner(socket)
-// {
-//   socket.broadcast.emit("joined");
-// }
-// function sendAlert(e){
-//   socket.broadcast.emit("alert",e);
-// }
-// function sendLeaveBanner(socket){
-//   socket.broadcast.emit("leave");
-// }

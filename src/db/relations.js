@@ -1,28 +1,31 @@
-//var validator= require('validator');
+//this model saves user and its relations
+// for eg, he is friend with whom ,he has blocked whom,he has starred whoom,and all other future relations...
+//basically a doc in this model will be like
+                    // {
+                    //   "_id":5e6d43f41d5b652300185618,
+                    //   "name":"jhonny",
+                    //   "isFriendWith":[
+                    //     {
+                    //       "_id":"5e72768023b20f3d5cf999bc",
+                    //       "uid":"5e6d4293ba034b254c895a9d"
+                    //     }
+                    //     .
+                    //     . 
+                    //     .
+                    //   ],
+                    //   "createdAt":"1584219124589",
+                    //   "updatedAt":"1584559744097"
+                    // }
 var mongoose= require('mongoose');
-//var bcrypt = require('bcryptjs');
-//var jwt = require("jsonwebtoken");
-//const Task = require("./task_module");
 var Users = require("./user_module");
 var RelationsSchema  = new mongoose.Schema({
-    // uid: {
-    //   required:true,
-    //   type:String,
-    //   trim:true,
-    // },
+    
     name:{
       required:true,
       type:String,
       trim:true
     },
-    // age:{
-    //   type:Number,
-    //   default:10,
-    //   required:true,
-    //   min:0,
-
-    // } ,
-  
+    
   isFriendWith:[
     {
       uid:{
@@ -38,32 +41,6 @@ var RelationsSchema  = new mongoose.Schema({
 {
   timestamps:true
 } );
-
-// userSchema.virtual("tasks",{
-//   ref:'Task',
-//   localField:"_id",
-//   foreignField:"owner"
-// });
-
-// RelationsSchema.pre('save' , async function(next){
-//   var user = this;
-//   console.log('pizza is my love',JSON.stringify(user));
-
-//   // var isFound = await User.findOne({email:user.email});
-//   // if(isFound){
-//   //   console.log(isFound);
-//   //   throw new Error("email is taken");
-//   //
-//   // }
-
-//   user.save();
-//   next();
-
-// });
-
-
-
-
 
 
 

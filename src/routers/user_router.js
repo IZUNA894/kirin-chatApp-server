@@ -1,3 +1,7 @@
+//this router gonna handle all usr related req
+//like REST,CRUD  req...
+// i have code here for nearly all operations in crud but
+// have used only 3-4 routes...rest are for future....
 var express = require("express");
 var multer = require('multer');
 var router = express.Router();
@@ -11,7 +15,7 @@ var auth = require('../middleware/auth_ware');
 var upload=multer({
   limits:
   {
-    fileSize:1000000
+    fileSize:5000000
   },
   fileFilter(req,file,cb){
     console.log("inside uploader function");
@@ -187,10 +191,7 @@ router.post('/users/login', async function(req,res){
  try{
    console.log("user trying to login");
    var user = await User.findByCredentials(req.body.email,req.body.password);
-   //console.log(req.body.password);
-   //console.log(user);
-   //var user = await User.findOne({email});
-
+   
    if(!user){
    throw new Error("unable to login 193");
    }

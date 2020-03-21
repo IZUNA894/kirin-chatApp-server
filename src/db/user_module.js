@@ -1,8 +1,10 @@
+// this model will store user info 
+
 var validator= require('validator');
 var mongoose= require('mongoose');
 var bcrypt = require('bcryptjs');
 var jwt = require("jsonwebtoken");
-//const Task = require("./task_module");
+
 var userSchema  = new mongoose.Schema({
     name: {
       required:true,
@@ -21,7 +23,7 @@ var userSchema  = new mongoose.Schema({
       default:10,
       required:true,
       min:0,
-      unique:true,
+      // unique:true,          //remove this line comment if u want phone no, to be unique...
       validate(value){
         if(!validator.isMobilePhone(value))
         throw new Error("phone number is not valid");
@@ -33,7 +35,7 @@ var userSchema  = new mongoose.Schema({
     required:true,
     trim:true,
     lowercase:true,
-    unique:true,
+    // unique:true,                remove this line comment if u want phone no, to be unique...
     validate(value){
       if(!validator.isEmail(value))
       throw new Error("email is not valid");
@@ -62,21 +64,16 @@ var userSchema  = new mongoose.Schema({
   timestamps:true
 } );
 
-// userSchema.virtual("tasks",{
-//   ref:'Task',
-//   localField:"_id",
-//   foreignField:"owner"
-// });
 
+
+// function to hash the password before save
 userSchema.pre('save' , async function(next){
   var user = this;
-  //console.log("saved runned...........................")
   
   var hashedPass ="";
   if(user.isModified('password'))
   {
    hashedPass =  await bcrypt.hash(user.password,8);
-   //console.log(hashedPass);
    user.password =hashedPass;
   }
   next();
@@ -84,12 +81,11 @@ userSchema.pre('save' , async function(next){
 
 
 
-
+//function to get jwt token
 userSchema.methods.getAuthToken = async function(){
   var user = this;
   var token = await jwt.sign({_id:user._id.toString()},process.env.JWT_SECRETKEY);
   user.tokens= user.tokens.concat({token});
-  //console.log("runned get auth token")
   await user.save();
   return token;
 
@@ -106,6 +102,8 @@ userSchema.methods.toJSON = function (){
   return user;
 }
 
+//this function is use to find if a usr exists in database ot not
+// called at a time of login
 userSchema.statics.findByCredentials = async (email,password) =>
 {
   var user = await User.findOne({email});
@@ -115,18 +113,7 @@ userSchema.statics.findByCredentials = async (email,password) =>
   }
   //console.log(password,user.password);
   var result = await bcrypt.compare(password,user.password)
-  // .then((result)=>{
-  //   console.log("value of is found"+ result);
-  //   if(!result){
-  //   //console.log("error thrrownnnnn");
-  //   //throw new Error("unable to login from121");
-  //   cb();
-  //   }
-    
-  // })
-  // .catch((e)=>{
   
-  // })
   if(!result)
   {
     return undefined
