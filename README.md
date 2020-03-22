@@ -10,7 +10,7 @@ this app is made in 2 parts.
 2:Server - back end of app.
 
 this repositry is for server side of app.
-for client side of app [go there]().
+for client side of app [go there](https://github.com/IZUNA894/kirin-chatApp-client).
 
 ### Client side
 ## technology used
